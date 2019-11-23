@@ -1,0 +1,23 @@
+server:
+  port: 8084
+spring:
+  application:
+    name: cloud-history-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/kafka
+    username: root
+    password: zc123123
+  redis:
+    host: 192.168.203.132
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    lease-renewal-interval-in-seconds: 5      # 心跳时间
+    lease-expiration-duration-in-seconds: 10  # 发呆时间，即服务续约到期时间
+mybatis:
+  mapper-locations: classpath:mapper/*Dao.xml
+  type-aliases-package: com.zhangchun.history.server.model

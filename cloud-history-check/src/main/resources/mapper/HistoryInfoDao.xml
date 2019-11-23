@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhangchun.history.check.dao.HistoryInfoDao">
+  <resultMap id="BaseResultMap" type="com.zhangchun.history.check.model.HistoryInfo">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="ip" jdbcType="VARCHAR" property="ip" />
+    <result column="item_type" jdbcType="INTEGER" property="itemType" />
+    <result column="gid" jdbcType="INTEGER" property="gid" />
+    <result column="first_time" jdbcType="TIMESTAMP" property="firstTime" />
+    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
+    <result column="count" jdbcType="INTEGER" property="count" />
+    <result column="status" jdbcType="BIT" property="status" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, uid, ip, item_type, gid, first_time, last_time, count, status
+  </sql>
+  <select id="selectByExample" parameterType="com.zhangchun.history.check.model.HistoryInfoExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from history
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from history
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.zhangchun.history.check.model.HistoryInfoExample">
+    delete from history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.zhangchun.history.check.model.HistoryInfo">
+    insert into history (id, uid, ip, item_type, 
+      gid, first_time, last_time, 
+      count, status)
+    values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, 
+      #{gid,jdbcType=INTEGER}, #{firstTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, 
+      #{count,jdbcType=INTEGER}, #{status,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.zhangchun.history.check.model.HistoryInfo">
+    insert into history
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="ip != null">
+        ip,
+      </if>
+      <if test="itemType != null">
+        item_type,
+      </if>
+      <if test="gid != null">
+        gid,
+      </if>
+      <if test="firstTime != null">
+        first_time,
+      </if>
+      <if test="lastTime != null">
+        last_time,
+      </if>
+      <if test="count != null">
+        count,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null">
+        #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null">
+        #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="gid != null">
+        #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="firstTime != null">
+        #{firstTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTime != null">
+        #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="count != null">
+        #{count,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.zhangchun.history.check.model.HistoryInfoExample" resultType="java.lang.Long">
+    select count(*) from history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <select id="selectOneByExample" resultType="com.zhangchun.history.check.model.HistoryInfo">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from history
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update history
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.uid != null">
+        uid = #{record.uid,jdbcType=INTEGER},
+      </if>
+      <if test="record.ip != null">
+        ip = #{record.ip,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemType != null">
+        item_type = #{record.itemType,jdbcType=INTEGER},
+      </if>
+      <if test="record.gid != null">
+        gid = #{record.gid,jdbcType=INTEGER},
+      </if>
+      <if test="record.firstTime != null">
+        first_time = #{record.firstTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastTime != null">
+        last_time = #{record.lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.count != null">
+        count = #{record.count,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=BIT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update history
+    set id = #{record.id,jdbcType=BIGINT},
+      uid = #{record.uid,jdbcType=INTEGER},
+      ip = #{record.ip,jdbcType=VARCHAR},
+      item_type = #{record.itemType,jdbcType=INTEGER},
+      gid = #{record.gid,jdbcType=INTEGER},
+      first_time = #{record.firstTime,jdbcType=TIMESTAMP},
+      last_time = #{record.lastTime,jdbcType=TIMESTAMP},
+      count = #{record.count,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=BIT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhangchun.history.check.model.HistoryInfo">
+    update history
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="ip != null">
+        ip = #{ip,jdbcType=VARCHAR},
+      </if>
+      <if test="itemType != null">
+        item_type = #{itemType,jdbcType=INTEGER},
+      </if>
+      <if test="gid != null">
+        gid = #{gid,jdbcType=INTEGER},
+      </if>
+      <if test="firstTime != null">
+        first_time = #{firstTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastTime != null">
+        last_time = #{lastTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="count != null">
+        count = #{count,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=BIT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.zhangchun.history.check.model.HistoryInfo">
+    update history
+    set uid = #{uid,jdbcType=INTEGER},
+      ip = #{ip,jdbcType=VARCHAR},
+      item_type = #{itemType,jdbcType=INTEGER},
+      gid = #{gid,jdbcType=INTEGER},
+      first_time = #{firstTime,jdbcType=TIMESTAMP},
+      last_time = #{lastTime,jdbcType=TIMESTAMP},
+      count = #{count,jdbcType=INTEGER},
+      status = #{status,jdbcType=BIT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
