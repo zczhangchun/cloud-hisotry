@@ -1,10 +1,34 @@
 # 0.前言
 
-整个项目还没有未完成，对已完成的服务进行说明。
+eureka注册中心图
 
-spring-cloud的各组件不多加说明。
+![1](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/1.png)
 
 
+
+页面
+
+![2](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/2.png)
+
+
+
+选择类型
+
+![3](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/3.png)
+
+
+
+历史记录表
+
+![4](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/4.png)
+
+
+
+物品表
+
+![5](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/5.png)
+
+更新：将history-check删除，添加expire-monitor、history-page服务。具体看下面各服务介绍。
 
 # 1.history-producer
 
@@ -14,57 +38,21 @@ spring-cloud的各组件不多加说明。
 
 # 2.history-consumer
 
-负责消费kafka的数据。使用批处理监听。
+1.负责消费kafka的数据。使用批处理监听。
 
-## 2.1整体流程
+2.将redis中过期数据进行更新。【具体看后面的expire-monitor服务】
 
-1. 取到数据 
-
-2. 将数据存入数据库，数据库的表字段有添加一个“status”，用来记录是否有将数据正常存入Redis。【事务1】
-
-3. 将数据存入Redis，将数据插入另一个key中；并将数据库中的该条数据的“status”变成true，表示已将数据存入Redis【事务2】
-4. ack提交
-
-## 2.2分析
-
-存入Redis的数据为Hash，格式：
-
-<用户ID-类型-分区<物品ID，相关信息>>
-
-为避免BigKey，当一个Hash下的条数超过4000，就存入新的分区。
+3.将查询不到的game数据重新缓存到redis中【具体后面的history-page服务】
 
 
 
-如果在进行第二步，将数据存入数据库时，出现异常，那么会回滚。
-
-如果在进行第三步时，将数据存入Redis未成功，那么数据库的“状态”字段为false，说明数据没有被存入Redis。
-
-如果在进行第三步时，将数据存入Redis成功后，出异常，此数数据库中的“status”字段还未来得及修改。
-
-所以需要一个定时任务来定期校验“status”的值是否正确，即当数据存入Redis时，“status”应该为true；数据没有存入Redis，“status”应该为false。
-
-
-
-# 3.history-check
-
-用来定期校验数据库中“status”字段是否正确。
-
-流程：
-
-1. 创建一个定时任务
-2. 任务中先去查询数据库中所有“status”为false的字段（会为“status”添加一个索引，避免全表扫描）
-3. 将所有“status”为false的数据写回到Redis中
-4. 之后更新这些数据的“status”，改为true。
-
-
-
-# 4.history-server
+# 3.history-server
 
 历史记录的主服务
 
 
 
-## 4.1获取指定用户、指定类型的历史记录
+## 3.1获取指定用户、指定类型的历史记录
 
 流程：
 
@@ -101,4 +89,53 @@ spring-cloud的各组件不多加说明。
    }
    ```
 
-   
+
+
+## 3.2 删除指定用户指定类型的历史记录
+
+1.删除数据库数据
+
+2.删除Redis中数据，使用渐进式对key进行删除。
+
+
+
+
+
+## 3.3 删除指定物品的历史记录
+
+1.删除数据库数据
+
+2.删除redis中数据。
+
+
+
+# 4.expire-monitor
+
+此服务用来监听redis中的Game的过期数据，将过期数据发送到history-consumer服务，由kafka接收后，将数据库数据更新到Redis。
+
+将Game数据存放到Redis中，存放24小时。
+
+在创建一个Game数据的过期标记，存放16小时。
+
+Game的过期标记会比Game提早过期，一旦过期，此服务就能监听到过期数据，将过期数据发送到history-consumer【kafka服务】。
+
+history-consumer接收到过期数据后，查询数据库，将数据库的数据更新到Redis，还是存放Game数据和Game的过期标记。
+
+
+
+# 5.history-page
+
+调用history-server【历史记录服务】，查询出历史记录，并将每条history中game数据进行填充，渲染到页面。
+
+
+
+在对每条history中的game数据进行填充时，game数据还是从Redis中查询。这里查询不到的Redis数据，不进行填充，直接返回一个空的Game数据。
+
+查询不到的Redis数据，发送给history-consumer【kafka服务】，由history-consumer接收到并查询数据库，更新到Redis。
+
+
+
+
+
+
+
