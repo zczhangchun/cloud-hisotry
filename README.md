@@ -2,13 +2,13 @@
 
 eureka注册中心图
 
-![1](zczhangchun/image/1.png)
+![1](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/1.png)
 
 
 
 页面
 
-![2](zczhangchun/image/2.png)
+![2](https://github.com/zczhangchun/cloud-hisotry/blob/master/image/2.png)
 
 
 
