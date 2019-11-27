@@ -20,4 +20,7 @@ eureka:
     lease-expiration-duration-in-seconds: 10  # 发呆时间，即服务续约到期时间
 mybatis:
   mapper-locations: classpath:mapper/*Dao.xml
-  type-aliases-package: com.zhangchun.history.server.model
+  type-aliases-package: com.zhangchun.history.server.dto
+  configuration:
+    map-underscore-to-camel-case: true
+  type-handlers-package: com.zhangchun.history.server.typehandlers

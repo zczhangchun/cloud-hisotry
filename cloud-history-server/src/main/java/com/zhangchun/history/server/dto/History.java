@@ -1,7 +1,11 @@
 package com.zhangchun.history.server.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -10,13 +14,15 @@ import java.util.Date;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class History {
 
     private Integer gid;
 
-    private Date firstTime;
+    private Long firstTime;
 
-    private Date lastTime;
+    private Long lastTime;
 
     private Integer count;
 }

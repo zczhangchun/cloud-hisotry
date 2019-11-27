@@ -28,4 +28,21 @@ public class HistoryController {
         return ResponseEntity.ok(historyService.getHistoryByUidAndItemType(uid, itemType));
 
     }
+
+    @RequestMapping("/{uid}/{itemType}/{gid}")
+    public ResponseEntity<Void> deleteHistoryByGid(@PathVariable("uid") Integer uid,
+                                                  @PathVariable("itemType") Integer itemType,
+                                                  @PathVariable("gid") Integer gid){
+
+        historyService.deleteHistoryByGid(uid, itemType, gid);
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping("delete/{uid}/{itemType}")
+    public ResponseEntity<Void> clearHistoryByItemType(@PathVariable("uid") Integer uid,
+                                                       @PathVariable("itemType") Integer itemType){
+
+        historyService.clearHistoryByItemType(uid, itemType);
+        return ResponseEntity.ok().build();
+    }
 }

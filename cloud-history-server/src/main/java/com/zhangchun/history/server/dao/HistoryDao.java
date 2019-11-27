@@ -10,4 +10,8 @@ import java.util.List;
 public interface HistoryDao {
 
     List<History> selectByUidAndItemType(@Param("uid") int id, @Param("itemType")int itemType);
+
+    void deleteByGid(@Param("uid") Integer uid, @Param("itemType") Integer itemType, @Param("gid") Integer gid);
+
+    void deleteByItemType(@Param("uid") Integer uid,@Param("itemType") Integer itemType);
 }

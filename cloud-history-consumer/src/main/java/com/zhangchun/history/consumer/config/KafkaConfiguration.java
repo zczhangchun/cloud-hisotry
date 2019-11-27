@@ -8,12 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
-import org.springframework.kafka.listener.AbstractMessageListenerContainer;
-import org.springframework.kafka.listener.KafkaMessageListenerContainer;
-import org.springframework.kafka.transaction.KafkaAwareTransactionManager;
-import org.springframework.kafka.transaction.KafkaTransactionManager;
+import org.springframework.kafka.listener.ContainerProperties;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,12 +28,13 @@ public class KafkaConfiguration {
         ConcurrentKafkaListenerContainerFactory container = new ConcurrentKafkaListenerContainerFactory();
         container.setConsumerFactory(new DefaultKafkaConsumerFactory(consumerProps()));
         //设置并发量，小于或等于Topic的分区数
-        container.setConcurrency(5);
+        container.setConcurrency(1);
         //设置为批量监听
+        container.getContainerProperties().setPollTimeout(500);
         container.setBatchListener(true);
 
 
-        container.getContainerProperties().setAckMode(AbstractMessageListenerContainer.AckMode.MANUAL_IMMEDIATE);
+        container.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL_IMMEDIATE);
 
         return container;
     }

@@ -10,7 +10,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
 import java.util.Random;
 
 /**
@@ -26,7 +25,7 @@ public class ProducerTask {
 
 
 
-    @Scheduled(cron="0/1 * * * * ?")
+    @Scheduled(cron="0/3 * * * * ?")
     public void sendMsg(){
 
         Random random = new Random();
@@ -36,8 +35,8 @@ public class ProducerTask {
                 .uid(random.nextInt(10))
                 .ip("192.168.0." + random.nextInt(10))
                 .gid(random.nextInt(10))
-                .firstTime(new Date(System.currentTimeMillis() - 10))
-                .lastTime(new Date())
+                .firstTime(System.currentTimeMillis() - 10)
+                .lastTime(System.currentTimeMillis())
                 .count(random.nextInt(10) + 2)
                 .itemType(random.nextInt(3) + 1)
                 .build();

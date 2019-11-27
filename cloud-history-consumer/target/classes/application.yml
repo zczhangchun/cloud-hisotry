@@ -10,7 +10,9 @@ spring:
     host: 192.168.203.132
 mybatis:
   mapper-locations: classpath:mapper/*Dao.xml
-  type-aliases-package: com.xm4399.history.consumer.model
+  type-aliases-package: com.zhangchun.history.consumer.model
+  configuration:
+    map-underscore-to-camel-case: true
 #showSql
 logging:
   level:

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.xm4399.history.consumer.dao.HistoryInfoDao">
-  <resultMap id="BaseResultMap" type="com.xm4399.history.consumer.model.HistoryInfo">
+<mapper namespace="com.zhangchun.history.consumer.dao.HistoryInfoDao">
+  <resultMap id="BaseResultMap" type="com.zhangchun.history.consumer.model.HistoryInfo">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="uid" jdbcType="INTEGER" property="uid" />
     <result column="ip" jdbcType="VARCHAR" property="ip" />
@@ -10,7 +10,6 @@
     <result column="first_time" jdbcType="TIMESTAMP" property="firstTime" />
     <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
     <result column="count" jdbcType="INTEGER" property="count" />
-    <result column="status" jdbcType="BIT" property="status" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -71,9 +70,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, uid, ip, item_type, gid, first_time, last_time, count, status
+    id, uid, ip, item_type, gid, first_time, last_time, count
   </sql>
-  <select id="selectByExample" parameterType="com.xm4399.history.consumer.model.HistoryInfoExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.zhangchun.history.consumer.model.HistoryInfoExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
@@ -87,31 +86,15 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from history
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from history
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.xm4399.history.consumer.model.HistoryInfoExample">
-    delete from history
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" useGeneratedKeys="true" keyColumn="id" keyProperty="id" parameterType="com.xm4399.history.consumer.model.HistoryInfo">
+  <insert id="insert" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
     insert into history (id, uid, ip, item_type, 
       gid, first_time, last_time, 
-      count, status)
+      count)
     values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, 
       #{gid,jdbcType=INTEGER}, #{firstTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, 
-      #{count,jdbcType=INTEGER}, #{status,jdbcType=BIT})
+      #{count,jdbcType=INTEGER})
   </insert>
-  <insert id="insertSelective" parameterType="com.xm4399.history.consumer.model.HistoryInfo">
+  <insert id="insertSelective" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
     insert into history
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -137,9 +120,6 @@
       </if>
       <if test="count != null">
         count,
-      </if>
-      <if test="status != null">
-        status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -167,18 +147,10 @@
       <if test="count != null">
         #{count,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=BIT},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.xm4399.history.consumer.model.HistoryInfoExample" resultType="java.lang.Long">
-    select count(*) from history
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <select id="selectOneByExample" parameterType="com.xm4399.history.consumer.model.HistoryInfoExample" resultMap="BaseResultMap">
+
+  <select id="selectOneByExample" resultType="com.zhangchun.history.consumer.model.HistoryInfo">
     select
     <if test="distinct">
       distinct
@@ -192,42 +164,17 @@
       order by ${orderByClause}
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update history
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
-      </if>
-      <if test="record.uid != null">
-        uid = #{record.uid,jdbcType=INTEGER},
-      </if>
-      <if test="record.ip != null">
-        ip = #{record.ip,jdbcType=VARCHAR},
-      </if>
-      <if test="record.itemType != null">
-        item_type = #{record.itemType,jdbcType=INTEGER},
-      </if>
-      <if test="record.gid != null">
-        gid = #{record.gid,jdbcType=INTEGER},
-      </if>
-      <if test="record.firstTime != null">
-        first_time = #{record.firstTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.lastTime != null">
-        last_time = #{record.lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.count != null">
-        count = #{record.count,jdbcType=INTEGER},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=BIT},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
+  <select id="selectByUidAndItemTypeAndGid" resultType="com.zhangchun.history.consumer.model.HistoryInfo">
+    select * from history where uid=#{uid} and item_type=#{itemType} and gid=#{gid} limit 1
+  </select>
+    <select id="selectByIds" resultType="com.zhangchun.history.consumer.model.Game">
+      SELECT id,img,name FROM game WHERE id IN
+      <foreach collection="list" item="id" index="index" open="(" close= ")" separator=",">
+        #{id}
+      </foreach>
+    </select>
+
+    <update id="updateByExample" parameterType="map">
     update history
     set id = #{record.id,jdbcType=BIGINT},
       uid = #{record.uid,jdbcType=INTEGER},
@@ -236,13 +183,12 @@
       gid = #{record.gid,jdbcType=INTEGER},
       first_time = #{record.firstTime,jdbcType=TIMESTAMP},
       last_time = #{record.lastTime,jdbcType=TIMESTAMP},
-      count = #{record.count,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=BIT}
+      count = #{record.count,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.xm4399.history.consumer.model.HistoryInfo">
+  <update id="updateByPrimaryKeySelective" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
     update history
     <set>
       <if test="uid != null">
@@ -266,13 +212,10 @@
       <if test="count != null">
         count = #{count,jdbcType=INTEGER},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=BIT},
-      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.xm4399.history.consumer.model.HistoryInfo">
+  <update id="updateByPrimaryKey" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
     update history
     set uid = #{uid,jdbcType=INTEGER},
       ip = #{ip,jdbcType=VARCHAR},
@@ -280,8 +223,7 @@
       gid = #{gid,jdbcType=INTEGER},
       first_time = #{firstTime,jdbcType=TIMESTAMP},
       last_time = #{lastTime,jdbcType=TIMESTAMP},
-      count = #{count,jdbcType=INTEGER},
-      status = #{status,jdbcType=BIT}
+      count = #{count,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
