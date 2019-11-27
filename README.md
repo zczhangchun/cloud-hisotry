@@ -30,9 +30,11 @@ eureka注册中心图
 
 更新：将history-check删除，添加expire-monitor、history-page服务。具体看下面各服务介绍。
 
+
 # 1.history-producer
 
 模拟生产历史数据。将数据生产到kafka。
+
 
 
 
@@ -43,6 +45,7 @@ eureka注册中心图
 2.将redis中过期数据进行更新。【具体看后面的expire-monitor服务】
 
 3.将查询不到的game数据重新缓存到redis中【具体后面的history-page服务】
+
 
 
 
@@ -109,6 +112,7 @@ eureka注册中心图
 
 
 
+
 # 4.expire-monitor
 
 此服务用来监听redis中的Game的过期数据，将过期数据发送到history-consumer服务，由kafka接收后，将数据库数据更新到Redis。
@@ -120,6 +124,7 @@ eureka注册中心图
 Game的过期标记会比Game提早过期，一旦过期，此服务就能监听到过期数据，将过期数据发送到history-consumer【kafka服务】。
 
 history-consumer接收到过期数据后，查询数据库，将数据库的数据更新到Redis，还是存放Game数据和Game的过期标记。
+
 
 
 
