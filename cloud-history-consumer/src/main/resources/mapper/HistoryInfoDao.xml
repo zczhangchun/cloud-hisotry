@@ -1,229 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.zhangchun.history.consumer.dao.HistoryInfoDao">
-  <resultMap id="BaseResultMap" type="com.zhangchun.history.consumer.model.HistoryInfo">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="uid" jdbcType="INTEGER" property="uid" />
-    <result column="ip" jdbcType="VARCHAR" property="ip" />
-    <result column="item_type" jdbcType="INTEGER" property="itemType" />
-    <result column="gid" jdbcType="INTEGER" property="gid" />
-    <result column="first_time" jdbcType="TIMESTAMP" property="firstTime" />
-    <result column="last_time" jdbcType="TIMESTAMP" property="lastTime" />
-    <result column="count" jdbcType="INTEGER" property="count" />
+<mapper namespace="com.zhangchun.history.consumer.dao.HistoryDao">
+  <resultMap id="BaseResultMap" type="com.zhangchun.history.consumer.model.History">
+    <id column="id" jdbcType="BIGINT" property="id"/>
+    <result column="user_id" jdbcType="VARCHAR" property="userId" />
+    <result column="user_type" jdbcType="TINYINT" property="userType" />
+    <result column="item_id" jdbcType="INTEGER" property="itemId" />
+    <result column="item_type" jdbcType="TINYINT" property="itemType" />
+    <result column="first_time" jdbcType="BIGINT" property="firstTime" />
+    <result column="last_time" jdbcType="BIGINT" property="lastTime" />
+    <result column="count" jdbcType="BIGINT" property="count" />
   </resultMap>
-  <sql id="Example_Where_Clause">
-    <where>
-      <foreach collection="oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause">
-    <where>
-      <foreach collection="example.oredCriteria" item="criteria" separator="or">
-        <if test="criteria.valid">
-          <trim prefix="(" prefixOverrides="and" suffix=")">
-            <foreach collection="criteria.criteria" item="criterion">
-              <choose>
-                <when test="criterion.noValue">
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue">
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue">
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue">
-                  and ${criterion.condition}
-                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
+
+
   <sql id="Base_Column_List">
-    id, uid, ip, item_type, gid, first_time, last_time, count
   </sql>
-  <select id="selectByExample" parameterType="com.zhangchun.history.consumer.model.HistoryInfoExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from history
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <insert id="insert" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
-    insert into history (id, uid, ip, item_type, 
-      gid, first_time, last_time, 
-      count)
-    values (#{id,jdbcType=BIGINT}, #{uid,jdbcType=INTEGER}, #{ip,jdbcType=VARCHAR}, #{itemType,jdbcType=INTEGER}, 
-      #{gid,jdbcType=INTEGER}, #{firstTime,jdbcType=TIMESTAMP}, #{lastTime,jdbcType=TIMESTAMP}, 
-      #{count,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
-    insert into history
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="uid != null">
-        uid,
-      </if>
-      <if test="ip != null">
-        ip,
-      </if>
-      <if test="itemType != null">
-        item_type,
-      </if>
-      <if test="gid != null">
-        gid,
-      </if>
-      <if test="firstTime != null">
-        first_time,
-      </if>
-      <if test="lastTime != null">
-        last_time,
-      </if>
-      <if test="count != null">
-        count,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="uid != null">
-        #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="ip != null">
-        #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="itemType != null">
-        #{itemType,jdbcType=INTEGER},
-      </if>
-      <if test="gid != null">
-        #{gid,jdbcType=INTEGER},
-      </if>
-      <if test="firstTime != null">
-        #{firstTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastTime != null">
-        #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="count != null">
-        #{count,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
 
-  <select id="selectOneByExample" resultType="com.zhangchun.history.consumer.model.HistoryInfo">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from history
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByUidAndItemTypeAndGid" resultType="com.zhangchun.history.consumer.model.HistoryInfo">
-    select * from history where uid=#{uid} and item_type=#{itemType} and gid=#{gid} limit 1
-  </select>
-    <select id="selectByIds" resultType="com.zhangchun.history.consumer.model.Game">
-      SELECT id,img,name FROM game WHERE id IN
-      <foreach collection="list" item="id" index="index" open="(" close= ")" separator=",">
-        #{id}
-      </foreach>
-    </select>
-
-    <update id="updateByExample" parameterType="map">
-    update history
-    set id = #{record.id,jdbcType=BIGINT},
-      uid = #{record.uid,jdbcType=INTEGER},
-      ip = #{record.ip,jdbcType=VARCHAR},
-      item_type = #{record.itemType,jdbcType=INTEGER},
-      gid = #{record.gid,jdbcType=INTEGER},
-      first_time = #{record.firstTime,jdbcType=TIMESTAMP},
-      last_time = #{record.lastTime,jdbcType=TIMESTAMP},
-      count = #{record.count,jdbcType=INTEGER}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
-    update history
-    <set>
-      <if test="uid != null">
-        uid = #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="ip != null">
-        ip = #{ip,jdbcType=VARCHAR},
-      </if>
-      <if test="itemType != null">
-        item_type = #{itemType,jdbcType=INTEGER},
-      </if>
-      <if test="gid != null">
-        gid = #{gid,jdbcType=INTEGER},
-      </if>
-      <if test="firstTime != null">
-        first_time = #{firstTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastTime != null">
-        last_time = #{lastTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="count != null">
-        count = #{count,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.zhangchun.history.consumer.model.HistoryInfo">
-    update history
-    set uid = #{uid,jdbcType=INTEGER},
-      ip = #{ip,jdbcType=VARCHAR},
-      item_type = #{itemType,jdbcType=INTEGER},
-      gid = #{gid,jdbcType=INTEGER},
-      first_time = #{firstTime,jdbcType=TIMESTAMP},
-      last_time = #{lastTime,jdbcType=TIMESTAMP},
-      count = #{count,jdbcType=INTEGER}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+  <insert id="insertList" useGeneratedKeys="true" keyProperty="id" parameterType="com.zhangchun.history.consumer.model.History">
+    REPLACE INTO tb_history (user_id, user_type, item_id,item_type,
+     first_time, last_time, count)
+     VALUES
+    <foreach collection="list" item="history" separator=",">
+    (#{history.userId,jdbcType=VARCHAR}, #{history.userType,jdbcType=TINYINT}, #{history.itemId,jdbcType=INTEGER},#{history.itemType,jdbcType=TINYINT}, #{history.firstTime,jdbcType=BIGINT}, #{history.lastTime,jdbcType=BIGINT},#{history.count,jdbcType=BIGINT})
+    </foreach>
+  </insert>
 </mapper>
